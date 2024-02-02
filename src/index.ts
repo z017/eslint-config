@@ -1,66 +1,38 @@
-import stylistic from '@stylistic/eslint-plugin';
 
-function defineConfig() {
-  return [
+import stylistic from '@stylistic/eslint-plugin'
+import { FlatConfigItem } from './types'
+
+/**
+ * Construct an array of ESLint flat config items.
+ */
+export async function defineConfig():Promise<FlatConfigItem[]> {
+    return [
+    // global ignores
     {
-        name: "test-name",
-        files: ["**/*.ts"],
+        name: "ignored",
+        ignores: ["node_modules/**", "build/**", "dist/**"],
+    },
+    {
+        name: "js and ts style",
+        files: ["**/*.jsx?", "**/*.tsx?"],
         plugins: {
             '@stylistic' : stylistic,
+        },
+        languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "module"
         },
         rules: {
             '@stylistic/semi': ['error', 'never'],
         }
-        // 'env': {
-        //     'browser': true,
-        //     'es2021': true,
-        //     'node': true
-        // },
-        // 'extends': [
-        //     'eslint:recommended',
-        //     'plugin:@typescript-eslint/recommended'
-        // ],
-        // 'overrides': [
-        //     {
-        //         'env': {
-        //             'node': true
-        //         },
-        //         'files': [
-        //             '.eslintrc.{js,cjs}'
-        //         ],
-        //         'parserOptions': {
-        //             'sourceType': 'script'
-        //         }
-        //     }
-        // ],
-        // 'parser': '@typescript-eslint/parser',
-        // 'parserOptions': {
-        //     'ecmaVersion': 'latest',
-        //     'sourceType': 'module'
-        // },
-        // 'plugins': [
-        //     '@typescript-eslint'
-        // ],
-        // 'rules': {
-        //     'indent': [
-        //         'error',
-        //         4
-        //     ],
-        //     'linebreak-style': [
-        //         'error',
-        //         'unix'
-        //     ],
-        //     'quotes': [
-        //         'error',
-        //         'single'
-        //     ],
-        //     'semi': [
-        //         'error',
-        //         'never'
-        //     ]
-        // }
+    },
+    {
+        name: 'config files',
+        files: ["**/*.config.js", "**/*.config.ts"],
+        languageOptions: {
+            // env node
+            sourceType: "script"
+        },
     }
-];
+]
 }
-
-export {defineConfig};
